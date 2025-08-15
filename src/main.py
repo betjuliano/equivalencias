@@ -8,10 +8,11 @@ load_dotenv()
 # DON'T CHANGE THIS !!!
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, jsonify
 from werkzeug.security import generate_password_hash
 from src.models.equivalencia import db, Admin
 from src.routes.equivalencia import equivalencia_bp
+from src.config.supabase import supabase_config
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 
@@ -35,6 +36,31 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Inicializar banco de dados
 db.init_app(app)
 
+# Rota para testar conexão com Supabase
+@app.route('/api/supabase/test')
+def test_supabase():
+    """Endpoint para testar conexão com Supabase"""
+    success, message = supabase_config.test_connection()
+    return jsonify({
+        'success': success,
+        'message': message,
+        'supabase_url': supabase_config.url
+    })
+
+# Rota para informações do sistema
+@app.route('/api/info')
+def system_info():
+    """Endpoint com informações do sistema"""
+    return jsonify({
+        'name': 'Sistema de Equivalências UFSM',
+        'version': '2.0.0',
+        'description': 'Sistema para cadastro e consulta de equivalências de disciplinas',
+        'developer': 'Prof. Juliano Alves - Grupo de Pesquisa em IA - IA Projetos',
+        'institution': 'Universidade Federal de Santa Maria',
+        'database': 'Supabase PostgreSQL' if os.getenv('DATABASE_URL') else 'SQLite Local',
+        'supabase_configured': bool(os.getenv('SUPABASE_URL'))
+    })
+
 with app.app_context():
     db.create_all()
     
@@ -47,6 +73,11 @@ with app.app_context():
         db.session.add(admin_user)
         db.session.commit()
         print("Usuário administrador criado: admin / adm4125")
+    
+    # Testar conexão com Supabase
+    if os.getenv('SUPABASE_URL'):
+        success, message = supabase_config.test_connection()
+        print(f"Supabase: {message}")
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -67,5 +98,11 @@ def serve(path):
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
     debug = os.getenv('FLASK_ENV') == 'development'
+    
+    print(f"🚀 Iniciando Sistema de Equivalências UFSM")
+    print(f"📍 Porta: {port}")
+    print(f"🐘 Banco: {'Supabase PostgreSQL' if os.getenv('DATABASE_URL') else 'SQLite Local'}")
+    print(f"🔧 Debug: {debug}")
+    
     app.run(host='0.0.0.0', port=port, debug=debug)
 

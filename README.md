@@ -20,7 +20,8 @@ Sistema web para cadastro e consulta de equivalências de disciplinas do Curso d
 
 - **Backend**: Flask (Python)
 - **Frontend**: HTML5, CSS3, JavaScript, Tailwind CSS
-- **Banco de Dados**: SQLite (desenvolvimento) / PostgreSQL (produção)
+- **Banco de Dados**: Supabase PostgreSQL (produção) / SQLite (desenvolvimento)
+- **Supabase**: Cliente Python integrado para operações avançadas
 - **Autenticação**: Flask-SQLAlchemy + Werkzeug
 - **Design**: Tailwind CSS com gradientes e animações
 
