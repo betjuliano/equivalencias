@@ -49,6 +49,27 @@ Cada equivalência contém:
 ### Pré-requisitos
 - Python 3.8+
 - pip (gerenciador de pacotes Python)
+- Acesso ao Supabase (https://supabases.iaprojetos.com.br)
+
+### **1. Configurar Banco de Dados**
+
+#### **Opção A: Execução Rápida (Recomendada)**
+1. Acesse: https://supabases.iaprojetos.com.br
+2. Vá para **SQL Editor**
+3. Copie o conteúdo de `database/supabase_schema_complete.sql`
+4. Cole e execute no editor SQL
+5. Siga as instruções em `database/GUIA_EXECUCAO_SCHEMA.md`
+
+#### **Opção B: Script Python**
+```bash
+# Instalar dependências
+pip install psycopg2-binary werkzeug requests
+
+# Executar script
+python database/create_supabase_schema.py
+```
+
+### **2. Configurar Aplicação**
 
 ### Instalação Local
 
