@@ -1,0 +1,8 @@
+Flask
+flask-cors
+Flask-SQLAlchemy
+psycopg2-binary
+python-dotenv
+gunicorn
+supabase
+
