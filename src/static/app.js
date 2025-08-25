@@ -34,7 +34,9 @@ function hideLoginModal() {
 // Authentication functions
 async function checkAuth() {
     try {
-        const response = await fetch('/api/check-auth');
+        const response = await fetch('/api/check-auth', {
+            credentials: 'same-origin'
+        });
         const data = await response.json();
         
         if (data.authenticated) {
@@ -60,7 +62,8 @@ async function login() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password }),
+            credentials: 'same-origin'
         });
         
         const data = await response.json();
@@ -80,7 +83,7 @@ async function login() {
 
 async function logout() {
     try {
-        await fetch('/api/logout', { method: 'POST' });
+        await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
         hideAdminSection();
         showAlert('Logout realizado com sucesso!', 'info');
     } catch (error) {
@@ -104,7 +107,7 @@ async function loadEquivalencias() {
     showLoading(true);
     
     try {
-        const response = await fetch('/api/equivalencias');
+        const response = await fetch('/api/equivalencias', { credentials: 'same-origin' });
         const data = await response.json();
         
         if (response.ok) {
@@ -159,7 +162,7 @@ function displayEquivalencias(equivalencias) {
 
 async function loadAdminTable() {
     try {
-        const response = await fetch('/api/equivalencias');
+        const response = await fetch('/api/equivalencias', { credentials: 'same-origin' });
         const data = await response.json();
         
         if (response.ok) {
@@ -219,13 +222,15 @@ async function handleFormSubmit(e) {
             response = await fetch(`/api/equivalencias/${currentEditId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                credentials: 'same-origin'
             });
         } else {
             response = await fetch('/api/equivalencias', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                credentials: 'same-origin'
             });
         }
         
@@ -286,7 +291,8 @@ async function deleteEquivalencia(id) {
     
     try {
         const response = await fetch(`/api/equivalencias/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'same-origin'
         });
         
         const data = await response.json();
