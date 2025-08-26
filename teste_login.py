@@ -9,14 +9,16 @@ import sys
 
 def testar_login(base_url="http://localhost:5000"):
     """Testa o sistema de login"""
-    
+
+    session = requests.Session()
+
     print("🧪 Testando Sistema de Login - Equivalências UFSM")
     print("=" * 50)
-    
+
     # Teste 1: Verificar se o servidor está rodando
     print("1. Testando conectividade com o servidor...")
     try:
-        response = requests.get(f"{base_url}/api/info", timeout=5)
+        response = session.get(f"{base_url}/api/info", timeout=5)
         if response.status_code == 200:
             info = response.json()
             print(f"✅ Servidor online - {info.get('name', 'Sistema')}")
@@ -33,7 +35,7 @@ def testar_login(base_url="http://localhost:5000"):
     # Teste 2: Verificar autenticação inicial
     print("\n2. Verificando status de autenticação...")
     try:
-        response = requests.get(f"{base_url}/api/check-auth")
+        response = session.get(f"{base_url}/api/check-auth")
         if response.status_code == 200:
             auth_data = response.json()
             if auth_data.get('authenticated'):
@@ -53,7 +55,7 @@ def testar_login(base_url="http://localhost:5000"):
     }
     
     try:
-        response = requests.post(
+        response = session.post(
             f"{base_url}/api/login",
             json=login_data,
             headers={"Content-Type": "application/json"}
@@ -67,7 +69,7 @@ def testar_login(base_url="http://localhost:5000"):
             
             # Verificar se a sessão foi criada
             print("\n4. Verificando se a sessão foi criada...")
-            auth_response = requests.get(f"{base_url}/api/check-auth")
+            auth_response = session.get(f"{base_url}/api/check-auth")
             if auth_response.status_code == 200:
                 auth_data = auth_response.json()
                 if auth_data.get('authenticated'):
@@ -97,7 +99,7 @@ def testar_login(base_url="http://localhost:5000"):
     }
     
     try:
-        response = requests.post(
+        response = session.post(
             f"{base_url}/api/login",
             json=wrong_login_data,
             headers={"Content-Type": "application/json"}
@@ -114,12 +116,12 @@ def testar_login(base_url="http://localhost:5000"):
     # Teste 5: Testar logout
     print("\n6. Testando logout...")
     try:
-        response = requests.post(f"{base_url}/api/logout")
+        response = session.post(f"{base_url}/api/logout")
         if response.status_code == 200:
             print("✅ Logout realizado com sucesso")
             
             # Verificar se a sessão foi removida
-            auth_response = requests.get(f"{base_url}/api/check-auth")
+            auth_response = session.get(f"{base_url}/api/check-auth")
             if auth_response.status_code == 200:
                 auth_data = auth_response.json()
                 if not auth_data.get('authenticated'):
