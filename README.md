@@ -90,6 +90,8 @@ Execute o script de teste para verificar se tudo está funcionando:
 python teste_login.py
 ```
 
+> O script usa `requests.Session` para manter cookies entre as requisições e validar corretamente a autenticação.
+
 Para testar em servidor remoto:
 ```bash
 python teste_login.py http://seu-dominio.com
